@@ -26,7 +26,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(987, 878)
+        MainWindow.resize(987, 903)
         self.actionExit = QAction(MainWindow)
         self.actionExit.setObjectName(u"actionExit")
         self.centralwidget = QWidget(MainWindow)
@@ -185,10 +185,29 @@ class Ui_MainWindow(object):
 
         self.verticalLayout.addLayout(self.gridLayout_2)
 
+        self.horizontalLayout_2 = QHBoxLayout()
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.label_11 = QLabel(self.layoutWidget)
         self.label_11.setObjectName(u"label_11")
+        font1 = QFont()
+        font1.setBold(True)
+        self.label_11.setFont(font1)
 
-        self.verticalLayout.addWidget(self.label_11)
+        self.horizontalLayout_2.addWidget(self.label_11)
+
+        self.status = QLabel(self.layoutWidget)
+        self.status.setObjectName(u"status")
+        font2 = QFont()
+        font2.setItalic(False)
+        self.status.setFont(font2)
+        self.status.setAlignment(Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft|Qt.AlignmentFlag.AlignVCenter)
+
+        self.horizontalLayout_2.addWidget(self.status)
+
+        self.horizontalLayout_2.setStretch(0, 1)
+        self.horizontalLayout_2.setStretch(1, 12)
+
+        self.verticalLayout.addLayout(self.horizontalLayout_2)
 
         self.progressBar = QProgressBar(self.layoutWidget)
         self.progressBar.setObjectName(u"progressBar")
@@ -204,6 +223,7 @@ class Ui_MainWindow(object):
 
         self.proceedButton = QPushButton(self.layoutWidget)
         self.proceedButton.setObjectName(u"proceedButton")
+        self.proceedButton.setStyleSheet(u"background: rgb(246, 245, 244)")
 
         self.horizontalLayout.addWidget(self.proceedButton)
 
@@ -248,6 +268,7 @@ class Ui_MainWindow(object):
         self.label_9.setText(QCoreApplication.translate("MainWindow", u"Before:", None))
         self.label_10.setText(QCoreApplication.translate("MainWindow", u"After:", None))
         self.label_11.setText(QCoreApplication.translate("MainWindow", u"Progress:", None))
+        self.status.setText(QCoreApplication.translate("MainWindow", u"Not started", None))
         self.proceedButton.setText(QCoreApplication.translate("MainWindow", u"Process Files Now!", None))
         self.menuMenu.setTitle(QCoreApplication.translate("MainWindow", u"Main Menu", None))
     # retranslateUi

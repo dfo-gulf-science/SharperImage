@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>987</width>
-    <height>878</height>
+    <height>903</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -236,11 +236,35 @@
         </layout>
        </item>
        <item>
-        <widget class="QLabel" name="label_11">
-         <property name="text">
-          <string>Progress:</string>
-         </property>
-        </widget>
+        <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,12">
+         <item>
+          <widget class="QLabel" name="label_11">
+           <property name="font">
+            <font>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Progress:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="status">
+           <property name="font">
+            <font>
+             <italic>false</italic>
+            </font>
+           </property>
+           <property name="text">
+            <string>Not started</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
        <item>
         <widget class="QProgressBar" name="progressBar">
@@ -266,6 +290,9 @@
          </item>
          <item>
           <widget class="QPushButton" name="proceedButton">
+           <property name="styleSheet">
+            <string notr="true">background: rgb(246, 245, 244)</string>
+           </property>
            <property name="text">
             <string>Process Files Now!</string>
            </property>

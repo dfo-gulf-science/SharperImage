@@ -36,6 +36,7 @@ class MainWindow(QMainWindow):
         self.ui.targetDir.setText(last_target_dir)
         self.ui.sigmaSlider.setValue(int(last_sigma))
         self.ui.amountSlider.setValue(int(last_amount))
+        self.ui.status.setText("Ready.")
 
         # set the slider values into the appropriate text boxes
         self.ui.sigmaDisplay.setText(str(self.ui.sigmaSlider.value()))
@@ -79,7 +80,6 @@ class MainWindow(QMainWindow):
         source_dir = self.ui.sourceDir.text().strip()
         target_dir = self.ui.targetDir.text().strip()
 
-
         # some basic validation
 
         if not source_dir:
@@ -95,15 +95,29 @@ class MainWindow(QMainWindow):
             QMessageBox.warning(self, "Validation Error", "The target directory does not exist!")
             return
 
-
         # let's create a memory
         self.settings.setValue("last_source_dir", source_dir)
         self.settings.setValue("last_target_dir", target_dir)
 
-        self.close()
+        total_files = os.listdir(source_dir).__len__()
+        self.update_file_status(0, total_files)
+
+        for f in os.listdir(source_dir):
+            og_path = os.path.join(source_dir, f)
+            new_path = os.path.join(target_dir, f)
+            img = tifffile.imread(og_path)
+            new_data = sharpen(img, *best_one["params"])
+            tifffile.imwrite(new_path, data=new_data)
+            files.append(f)
+
+
+        #self.close()
 
 
 
+    def update_file_status(self, current:int, total:int):
+        txt = f"{current} of {total} files processed..."
+        self.ui.status.setText(txt)
 
 
 

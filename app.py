@@ -100,18 +100,28 @@ class MainWindow(QMainWindow):
         self.settings.setValue("last_target_dir", target_dir)
 
         total_files = os.listdir(source_dir).__len__()
+        idx = 0
+        self.ui.progressBar.setMinimum(0)
+        self.ui.progressBar.setMaximum(total_files)
         self.update_file_status(0, total_files)
+        sigma = self.ui.sigmaSlider.value()
+        amount = self.ui.amountSlider.value()
 
         for f in os.listdir(source_dir):
             og_path = os.path.join(source_dir, f)
             new_path = os.path.join(target_dir, f)
-            img = tifffile.imread(og_path)
-            new_data = sharpen(img, *best_one["params"])
-            tifffile.imwrite(new_path, data=new_data)
-            files.append(f)
+            img = cv2.imread(og_path)
+            new_data = sharpen(img, sigma, amount)
+            cv2.imwrite(new_path, img=new_data)
+            idx += 1
+            self.ui.progressBar.setValue(idx)
+            self.update_file_status(idx, total_files)
 
+        QMessageBox.information(self, "Job Successful", f"All {total_files} images have been processed!")
+        self.ui.progressBar.setValue(0)
+        self.ui.status.setText("Ready.")
+        self.disable_controls(False)
 
-        #self.close()
 
 
 

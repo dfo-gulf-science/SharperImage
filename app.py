@@ -2,17 +2,17 @@ import sys
 
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QPixmap, QTransform, QResizeEvent
-from PySide6.QtWidgets import QApplication, QMainWindow, QLabel
+from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QDialog
 # Import the generated layout class from your compiled file
-from ui_main_window import Ui_MainWindow
+from ui_main_window import Ui_Dialog
 
 
-class MainWindow(QMainWindow):
+class MainWindow(QDialog):
     def __init__(self):
         super().__init__()
 
         # Instantiate the generated UI layout class
-        self.ui = Ui_MainWindow()
+        self.ui = Ui_Dialog()
         # Cleanly inject the layouts and widgets straight into this instance
         self.ui.setupUi(self)
 

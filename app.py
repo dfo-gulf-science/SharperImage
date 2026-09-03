@@ -1,21 +1,22 @@
+import os.path
 import sys
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QSize
 from PySide6.QtGui import QPixmap, QTransform, QResizeEvent
-from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QDialog, QFileDialog
+from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QDialog, QFileDialog, QMessageBox
 # Import the generated layout class from your compiled file
-from ui_main_window import Ui_Dialog
+from ui_main_window import Ui_MainWindow
 import cv2
 
 from utils import sharpen
 
 
-class MainWindow(QDialog):
+class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
         # Instantiate the generated UI layout class
-        self.ui = Ui_Dialog()
+        self.ui = Ui_MainWindow()
         # Cleanly inject the layouts and widgets straight into this instance
         self.ui.setupUi(self)
 
@@ -34,9 +35,9 @@ class MainWindow(QDialog):
         self.original_filename = "original_otolith.tif"
         original_pixmap = QPixmap(self.original_filename)
         original_pixmap = original_pixmap.scaled(
-            400, 300,
-            Qt.AspectRatioMode.KeepAspectRatio,
-            Qt.TransformationMode.SmoothTransformation  # Keeps the image crisp
+            QSize(500, 500),
+            aspectMode=Qt.AspectRatioMode.KeepAspectRatio,
+            mode=Qt.TransformationMode.SmoothTransformation  # Keeps the image crisp
         )
         self.ui.originalImage.setPixmap(original_pixmap)
 
@@ -46,6 +47,52 @@ class MainWindow(QDialog):
         # connect the buttons with file pickers
         self.ui.sourceFileBrowse.clicked.connect(self.open_source_dir_picker)
         self.ui.targetFileBrowse.clicked.connect(self.open_target_dir_picker)
+
+        # connect the action exit menu action
+        self.ui.actionExit.triggered.connect(self.close)
+
+        # control behaviour of ok button
+        self.ui.proceedButton.clicked.connect(self.validate_and_submit)
+
+        # prime the progress bar
+        self.ui.progressBar.setValue(0)
+
+    def validate_and_submit(self):
+        # make all the fields disabled
+        self.disable_controls(True)
+
+        source_dir = self.ui.sourceDir.text().strip()
+        target_dir = self.ui.sourceDir.text().strip()
+
+        # some basic validation
+
+        if not source_dir:
+            QMessageBox.warning(self, "Validation Error", "The you need to have a source directory before continuing!")
+            return
+        elif not os.path.exists(source_dir):
+            QMessageBox.warning(self, "Validation Error", "The source directory does not exist!")
+            return
+        elif not target_dir:
+            QMessageBox.warning(self, "Validation Error", "The you need to have a target directory before continuing!")
+            return
+        elif not os.path.exists(target_dir):
+            QMessageBox.warning(self, "Validation Error", "The target directory does not exist!")
+            return
+
+
+
+
+        # 4. If everything is valid, manually accept and close the dialog
+        self.accept()
+
+
+    def disable_controls(self, value):
+        self.ui.sourceDir.setDisabled(value)
+        self.ui.targetDir.setDisabled(value)
+        self.ui.sigmaSlider.setDisabled(value)
+        self.ui.sigmaDisplay.setDisabled(value)
+        self.ui.amountSlider.setDisabled(value)
+        self.ui.amountDisplay.setDisabled(value)
 
     def open_source_dir_picker(self):
         # 4. Trigger the native file dialog when clicked
@@ -98,7 +145,7 @@ class MainWindow(QDialog):
         new_pixmap = QPixmap()
         new_pixmap.loadFromData(buffer.tobytes())
         new_pixmap = new_pixmap.scaled(
-            400, 300,
+            QSize(500, 500),
             Qt.AspectRatioMode.KeepAspectRatio,
             Qt.TransformationMode.SmoothTransformation  # Keeps the image crisp
         )

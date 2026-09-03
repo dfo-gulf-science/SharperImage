@@ -1,7 +1,7 @@
 import os.path
 import sys
 
-from PySide6.QtCore import Qt, QSize
+from PySide6.QtCore import Qt, QSize, QSettings
 from PySide6.QtGui import QPixmap, QTransform, QResizeEvent
 from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QDialog, QFileDialog, QMessageBox
 # Import the generated layout class from your compiled file
@@ -15,12 +15,27 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
+
         # Instantiate the generated UI layout class
         self.ui = Ui_MainWindow()
         # Cleanly inject the layouts and widgets straight into this instance
         self.ui.setupUi(self)
 
         self.setWindowTitle("The Sharper Image")
+
+        # instantiate settings
+        self.settings = QSettings("DFO", "TheSharperImage")
+
+        # see if we should load some defaults for directories
+        last_source_dir = self.settings.value("last_source_dir", "")
+        last_target_dir = self.settings.value("last_target_dir", "")
+        last_sigma = self.settings.value("last_sigma", 2)
+        last_amount = self.settings.value("last_amount", 17)
+
+        self.ui.sourceDir.setText(last_source_dir)
+        self.ui.targetDir.setText(last_target_dir)
+        self.ui.sigmaSlider.setValue(int(last_sigma))
+        self.ui.amountSlider.setValue(int(last_amount))
 
         # set the slider values into the appropriate text boxes
         self.ui.sigmaDisplay.setText(str(self.ui.sigmaSlider.value()))
@@ -62,7 +77,8 @@ class MainWindow(QMainWindow):
         self.disable_controls(True)
 
         source_dir = self.ui.sourceDir.text().strip()
-        target_dir = self.ui.sourceDir.text().strip()
+        target_dir = self.ui.targetDir.text().strip()
+
 
         # some basic validation
 
@@ -80,10 +96,15 @@ class MainWindow(QMainWindow):
             return
 
 
+        # let's create a memory
+        self.settings.setValue("last_source_dir", source_dir)
+        self.settings.setValue("last_target_dir", target_dir)
+
+        self.close()
 
 
-        # 4. If everything is valid, manually accept and close the dialog
-        self.accept()
+
+
 
 
     def disable_controls(self, value):
@@ -109,10 +130,13 @@ class MainWindow(QMainWindow):
     def update_sigma_display(self, value):
         self.ui.sigmaDisplay.setText(str(value))
         self.update_image()
+        self.settings.setValue("last_sigma", str(value))
+
 
     def update_amount_display(self, value):
         self.ui.amountDisplay.setText(str(value))
         self.update_image()
+        self.settings.setValue("last_amount", str(value))
 
     def validate_sigma_text(self):
         current_text = self.ui.sigmaDisplay.text()

@@ -1,2 +1,11 @@
 .venv
-temp
+temp/
+dist/
+build/
+*.spec
+__pycache__/
+*.pyc
+.venv/
+venv/
+config.ini
+userdata.json

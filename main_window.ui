@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>987</width>
-    <height>903</height>
+    <height>883</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -200,51 +200,13 @@
          <property name="sizeConstraint">
           <enum>QLayout::SizeConstraint::SetFixedSize</enum>
          </property>
-         <item row="1" column="0" alignment="Qt::AlignmentFlag::AlignTop">
-          <widget class="ZoomableLabel" name="originalImage">
-           <property name="frameShape">
-            <enum>QFrame::Shape::NoFrame</enum>
-           </property>
-           <property name="frameShadow">
-            <enum>QFrame::Shadow::Sunken</enum>
-           </property>
-           <property name="lineWidth">
-            <number>2</number>
-           </property>
-           <property name="midLineWidth">
-            <number>2</number>
-           </property>
-           <property name="text">
-            <string>TextLabel</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1" alignment="Qt::AlignmentFlag::AlignTop">
-          <widget class="ZoomableLabel" name="newImage">
-           <property name="frameShape">
-            <enum>QFrame::Shape::NoFrame</enum>
-           </property>
-           <property name="frameShadow">
-            <enum>QFrame::Shadow::Sunken</enum>
-           </property>
-           <property name="lineWidth">
-            <number>2</number>
-           </property>
-           <property name="midLineWidth">
-            <number>2</number>
-           </property>
-           <property name="text">
-            <string>TextLabel</string>
-           </property>
-          </widget>
-         </item>
          <item row="0" column="0">
           <widget class="QLabel" name="label_9">
            <property name="text">
             <string>Before:</string>
            </property>
            <property name="alignment">
-            <set>Qt::AlignmentFlag::AlignBottom|Qt::AlignmentFlag::AlignHCenter</set>
+            <set>Qt::AlignmentFlag::AlignBottom|Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft</set>
            </property>
           </widget>
          </item>
@@ -254,11 +216,27 @@
             <string>After:</string>
            </property>
            <property name="alignment">
-            <set>Qt::AlignmentFlag::AlignBottom|Qt::AlignmentFlag::AlignHCenter</set>
+            <set>Qt::AlignmentFlag::AlignBottom|Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft</set>
            </property>
           </widget>
          </item>
+         <item row="1" column="0">
+          <widget class="ZoomableGraphicsView" name="originalImage"/>
+         </item>
+         <item row="1" column="1">
+          <widget class="ZoomableGraphicsView" name="newImage"/>
+         </item>
         </layout>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_8">
+         <property name="styleSheet">
+          <string notr="true">color:grey</string>
+         </property>
+         <property name="text">
+          <string>NOTE: you can use Ctrl + mouse wheel to zoom in on the sample images.</string>
+         </property>
+        </widget>
        </item>
        <item>
         <spacer name="verticalSpacer">
@@ -382,9 +360,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>ZoomableLabel</class>
-   <extends>QLabel</extends>
-   <header>zoomable_label</header>
+   <class>ZoomableGraphicsView</class>
+   <extends>QGraphicsView</extends>
+   <header>custom_widgets</header>
   </customwidget>
  </customwidgets>
  <resources/>

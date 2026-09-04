@@ -16,19 +16,19 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QIcon, QImage, QKeySequence, QLinearGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
-from PySide6.QtWidgets import (QApplication, QComboBox, QFrame, QGridLayout,
-    QHBoxLayout, QLabel, QLayout, QLineEdit,
-    QMainWindow, QMenu, QMenuBar, QProgressBar,
-    QPushButton, QSizePolicy, QSlider, QSpacerItem,
-    QStatusBar, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QComboBox, QGridLayout, QHBoxLayout,
+    QLabel, QLayout, QLineEdit, QMainWindow,
+    QMenu, QMenuBar, QProgressBar, QPushButton,
+    QSizePolicy, QSlider, QSpacerItem, QStatusBar,
+    QVBoxLayout, QWidget)
 
-from zoomable_label import ZoomableLabel
+from custom_widgets import ZoomableGraphicsView
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(987, 903)
+        MainWindow.resize(987, 883)
         self.actionExit = QAction(MainWindow)
         self.actionExit.setObjectName(u"actionExit")
         self.centralwidget = QWidget(MainWindow)
@@ -167,40 +167,38 @@ class Ui_MainWindow(object):
         self.gridLayout_2 = QGridLayout()
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.gridLayout_2.setSizeConstraint(QLayout.SizeConstraint.SetFixedSize)
-        self.originalImage = ZoomableLabel(self.layoutWidget)
-        self.originalImage.setObjectName(u"originalImage")
-        self.originalImage.setFrameShape(QFrame.Shape.NoFrame)
-        self.originalImage.setFrameShadow(QFrame.Shadow.Sunken)
-        self.originalImage.setLineWidth(2)
-        self.originalImage.setMidLineWidth(2)
-
-        self.gridLayout_2.addWidget(self.originalImage, 1, 0, 1, 1, Qt.AlignmentFlag.AlignTop)
-
-        self.newImage = ZoomableLabel(self.layoutWidget)
-        self.newImage.setObjectName(u"newImage")
-        self.newImage.setFrameShape(QFrame.Shape.NoFrame)
-        self.newImage.setFrameShadow(QFrame.Shadow.Sunken)
-        self.newImage.setLineWidth(2)
-        self.newImage.setMidLineWidth(2)
-
-        self.gridLayout_2.addWidget(self.newImage, 1, 1, 1, 1, Qt.AlignmentFlag.AlignTop)
-
         self.label_9 = QLabel(self.layoutWidget)
         self.label_9.setObjectName(u"label_9")
-        self.label_9.setAlignment(Qt.AlignmentFlag.AlignBottom|Qt.AlignmentFlag.AlignHCenter)
+        self.label_9.setAlignment(Qt.AlignmentFlag.AlignBottom|Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft)
 
         self.gridLayout_2.addWidget(self.label_9, 0, 0, 1, 1)
 
         self.label_10 = QLabel(self.layoutWidget)
         self.label_10.setObjectName(u"label_10")
-        self.label_10.setAlignment(Qt.AlignmentFlag.AlignBottom|Qt.AlignmentFlag.AlignHCenter)
+        self.label_10.setAlignment(Qt.AlignmentFlag.AlignBottom|Qt.AlignmentFlag.AlignLeading|Qt.AlignmentFlag.AlignLeft)
 
         self.gridLayout_2.addWidget(self.label_10, 0, 1, 1, 1)
+
+        self.originalImage = ZoomableGraphicsView(self.layoutWidget)
+        self.originalImage.setObjectName(u"originalImage")
+
+        self.gridLayout_2.addWidget(self.originalImage, 1, 0, 1, 1)
+
+        self.newImage = ZoomableGraphicsView(self.layoutWidget)
+        self.newImage.setObjectName(u"newImage")
+
+        self.gridLayout_2.addWidget(self.newImage, 1, 1, 1, 1)
 
         self.gridLayout_2.setRowStretch(0, 1)
         self.gridLayout_2.setRowStretch(1, 8)
 
         self.verticalLayout.addLayout(self.gridLayout_2)
+
+        self.label_8 = QLabel(self.layoutWidget)
+        self.label_8.setObjectName(u"label_8")
+        self.label_8.setStyleSheet(u"color:grey")
+
+        self.verticalLayout.addWidget(self.label_8)
 
         self.verticalSpacer = QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
 
@@ -291,10 +289,9 @@ class Ui_MainWindow(object):
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"Sigma:", None))
         self.label_7.setText(QCoreApplication.translate("MainWindow", u"Color filter:", None))
         self.targetFileBrowse.setText(QCoreApplication.translate("MainWindow", u"Browse...", None))
-        self.originalImage.setText(QCoreApplication.translate("MainWindow", u"TextLabel", None))
-        self.newImage.setText(QCoreApplication.translate("MainWindow", u"TextLabel", None))
         self.label_9.setText(QCoreApplication.translate("MainWindow", u"Before:", None))
         self.label_10.setText(QCoreApplication.translate("MainWindow", u"After:", None))
+        self.label_8.setText(QCoreApplication.translate("MainWindow", u"NOTE: you can use Ctrl + mouse wheel to zoom in on the sample images.", None))
         self.label_11.setText(QCoreApplication.translate("MainWindow", u"Progress:", None))
         self.status.setText(QCoreApplication.translate("MainWindow", u"Not started", None))
         self.proceedButton.setText(QCoreApplication.translate("MainWindow", u"Process Files Now!", None))

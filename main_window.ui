@@ -76,6 +76,12 @@
          </item>
          <item row="0" column="1">
           <widget class="QSlider" name="sigmaSlider">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This is the sigma value to be used in the gaussian filter. The greater the sigma, the sharper the resulting image. The recommened default value for herring is 2.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+           <property name="whatsThis">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;this is something!!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
            <property name="minimum">
             <number>1</number>
            </property>
@@ -170,6 +176,9 @@
          </item>
          <item row="1" column="1">
           <widget class="QSlider" name="amountSlider">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This variable is simply a multiplier for the details captured by the unsharp mask. The greater this value, the more pronounced the captured details will be. The recommended default value for herring otolith images is 17.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
            <property name="minimum">
             <number>1</number>
            </property>
@@ -191,7 +200,11 @@
           </widget>
          </item>
          <item row="2" column="1">
-          <widget class="QComboBox" name="colorMap"/>
+          <widget class="QComboBox" name="colorMap">
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;An optional application of a color map to the enhanced images.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
@@ -345,16 +358,34 @@
    </property>
    <widget class="QMenu" name="menuMenu">
     <property name="title">
-     <string>Main Menu</string>
+     <string>File</string>
     </property>
+    <addaction name="actionRestoreDefaults"/>
     <addaction name="actionExit"/>
    </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionAbout"/>
+   </widget>
    <addaction name="menuMenu"/>
+   <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionExit">
    <property name="text">
     <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionRestoreDefaults">
+   <property name="text">
+    <string>Restore defaults</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
    </property>
   </action>
  </widget>

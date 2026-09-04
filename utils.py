@@ -1,3 +1,6 @@
+import os
+import sys
+
 import numpy as np
 from PySide6.QtGui import QPixmap, QImage
 from scipy.ndimage import gaussian_filter
@@ -41,3 +44,13 @@ def sharpen(image: np.ndarray, sigma: float = 1.0, amount: float = 1.0) -> np.nd
 
     return result
 
+
+def get_asset_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)

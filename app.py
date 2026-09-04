@@ -9,7 +9,7 @@ from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QDialog, QFileD
 from ui_main_window import Ui_MainWindow
 import cv2
 
-from utils import sharpen
+from utils import sharpen, get_asset_path
 
 
 class MainWindow(QMainWindow):
@@ -73,7 +73,7 @@ class MainWindow(QMainWindow):
         self.ui.amountDisplay.editingFinished.connect(self.validate_amount_text)
 
         # insert the original otolith pic into the appropriate label widget
-        self.original_filename = "original_otolith.tif"
+        self.original_filename = get_asset_path("original_otolith.tif")
         original_pixmap = QPixmap(self.original_filename)
         original_pixmap = original_pixmap.scaled(
             QSize(500, 500),

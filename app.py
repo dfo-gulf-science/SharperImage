@@ -1,7 +1,8 @@
 import os.path
 import sys
+import time
 
-from PySide6.QtCore import Qt, QSize, QSettings
+from PySide6.QtCore import Qt, QSize, QSettings, QCoreApplication
 from PySide6.QtGui import QPixmap, QTransform, QResizeEvent
 from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QDialog, QFileDialog, QMessageBox
 # Import the generated layout class from your compiled file
@@ -15,6 +16,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
+        self.is_cancelled = False
 
         # Instantiate the generated UI layout class
         self.ui = Ui_MainWindow()
@@ -25,6 +27,9 @@ class MainWindow(QMainWindow):
 
         # instantiate settings
         self.settings = QSettings("DFO", "TheSharperImage")
+
+        # initialize controls
+        self.disable_controls(False)
 
         # see if we should load some defaults for directories
         last_source_dir = self.settings.value("last_source_dir", "")
@@ -37,6 +42,26 @@ class MainWindow(QMainWindow):
         self.ui.sigmaSlider.setValue(int(last_sigma))
         self.ui.amountSlider.setValue(int(last_amount))
         self.ui.status.setText("Ready.")
+
+        # initialize the options for the color map combobox
+        options = [
+            ("None", None),
+            ("AUTUMN".title(), cv2.COLORMAP_AUTUMN),
+            ("BONE".title(), cv2.COLORMAP_BONE),
+            ("COOL".title(), cv2.COLORMAP_COOL),
+            ("HOT".title(), cv2.COLORMAP_HOT),
+            ("HSV", cv2.COLORMAP_HSV),
+            ("JET".title(), cv2.COLORMAP_JET),
+            ("OCEAN".title(), cv2.COLORMAP_OCEAN),
+            ("PINK".title(), cv2.COLORMAP_PINK),
+            ("RAINBOW".title(), cv2.COLORMAP_RAINBOW),
+            ("SPRING".title(), cv2.COLORMAP_SPRING),
+            ("SUMMER".title(), cv2.COLORMAP_SUMMER),
+            ("WINTER".title(), cv2.COLORMAP_WINTER),
+        ]
+        for label, value in options:
+            self.ui.colorMap.addItem(label, value)
+        self.ui.colorMap.currentIndexChanged.connect(self.update_image)
 
         # set the slider values into the appropriate text boxes
         self.ui.sigmaDisplay.setText(str(self.ui.sigmaSlider.value()))
@@ -69,12 +94,17 @@ class MainWindow(QMainWindow):
 
         # control behaviour of ok button
         self.ui.proceedButton.clicked.connect(self.validate_and_submit)
+        self.ui.cancelButton.clicked.connect(self.cancel_processing)
 
         # prime the progress bar
         self.ui.progressBar.setValue(0)
 
+    def cancel_processing(self):
+        self.is_cancelled = True
+
     def validate_and_submit(self):
         # make all the fields disabled
+        self.is_cancelled = False
         self.disable_controls(True)
 
         source_dir = self.ui.sourceDir.text().strip()
@@ -103,33 +133,39 @@ class MainWindow(QMainWindow):
         idx = 0
         self.ui.progressBar.setMinimum(0)
         self.ui.progressBar.setMaximum(total_files)
+        self.ui.progressBar.setValue(0)
         self.update_file_status(0, total_files)
         sigma = self.ui.sigmaSlider.value()
         amount = self.ui.amountSlider.value()
+        color_map = self.ui.colorMap.currentData()
 
         for f in os.listdir(source_dir):
             og_path = os.path.join(source_dir, f)
             new_path = os.path.join(target_dir, f)
             img = cv2.imread(og_path)
             new_data = sharpen(img, sigma, amount)
+            if color_map:
+                new_data = cv2.applyColorMap(new_data, color_map)
             cv2.imwrite(new_path, img=new_data)
             idx += 1
-            self.ui.progressBar.setValue(idx)
             self.update_file_status(idx, total_files)
+            self.ui.progressBar.setValue(idx)
+            QCoreApplication.processEvents()
+            if self.is_cancelled:
+                break
 
-        QMessageBox.information(self, "Job Successful", f"All {total_files} images have been processed!")
+        if not self.is_cancelled:
+            QMessageBox.information(self, "Job Successful", f"All {idx} images have been processed!")
+        else:
+            QMessageBox.warning(self, "Job Cancelled", f"A total of {idx} images were processed before the job was cancelled.")
         self.ui.progressBar.setValue(0)
         self.ui.status.setText("Ready.")
         self.disable_controls(False)
 
-
-
-
-    def update_file_status(self, current:int, total:int):
+    def update_file_status(self, current: int, total: int):
+        print("hello")
         txt = f"{current} of {total} files processed..."
         self.ui.status.setText(txt)
-
-
 
     def disable_controls(self, value):
         self.ui.sourceDir.setDisabled(value)
@@ -138,6 +174,9 @@ class MainWindow(QMainWindow):
         self.ui.sigmaDisplay.setDisabled(value)
         self.ui.amountSlider.setDisabled(value)
         self.ui.amountDisplay.setDisabled(value)
+        self.ui.colorMap.setDisabled(value)
+        self.ui.proceedButton.setDisabled(value)
+        self.ui.cancelButton.setDisabled(not value)
 
     def open_source_dir_picker(self):
         # 4. Trigger the native file dialog when clicked
@@ -155,7 +194,6 @@ class MainWindow(QMainWindow):
         self.ui.sigmaDisplay.setText(str(value))
         self.update_image()
         self.settings.setValue("last_sigma", str(value))
-
 
     def update_amount_display(self, value):
         self.ui.amountDisplay.setText(str(value))
@@ -185,6 +223,9 @@ class MainWindow(QMainWindow):
         amount = self.ui.amountSlider.value()
         original_data = cv2.imread(self.original_filename)
         new_data = sharpen(original_data, sigma, amount)
+        color_map = self.ui.colorMap.currentData()
+        if color_map:
+            new_data = cv2.applyColorMap(new_data, color_map)
 
         # 1. Compress the OpenCV BGR array into a JPG/PNG memory buffer
         _, buffer = cv2.imencode('.png', new_data)
@@ -195,7 +236,7 @@ class MainWindow(QMainWindow):
         new_pixmap = new_pixmap.scaled(
             QSize(500, 500),
             Qt.AspectRatioMode.KeepAspectRatio,
-            Qt.TransformationMode.SmoothTransformation  # Keeps the image crisp
+            Qt.TransformationMode.SmoothTransformation
         )
 
         self.ui.newImage.setPixmap(new_pixmap)

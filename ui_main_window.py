@@ -16,11 +16,11 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QIcon, QImage, QKeySequence, QLinearGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
-from PySide6.QtWidgets import (QApplication, QFrame, QGridLayout, QHBoxLayout,
-    QLabel, QLineEdit, QMainWindow, QMenu,
-    QMenuBar, QProgressBar, QPushButton, QSizePolicy,
-    QSlider, QSpacerItem, QStatusBar, QVBoxLayout,
-    QWidget)
+from PySide6.QtWidgets import (QApplication, QComboBox, QFrame, QGridLayout,
+    QHBoxLayout, QLabel, QLineEdit, QMainWindow,
+    QMenu, QMenuBar, QProgressBar, QPushButton,
+    QSizePolicy, QSlider, QSpacerItem, QStatusBar,
+    QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -70,20 +70,10 @@ class Ui_MainWindow(object):
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.gridLayout = QGridLayout()
         self.gridLayout.setObjectName(u"gridLayout")
-        self.label_6 = QLabel(self.layoutWidget)
-        self.label_6.setObjectName(u"label_6")
+        self.sourceDir = QLineEdit(self.layoutWidget)
+        self.sourceDir.setObjectName(u"sourceDir")
 
-        self.gridLayout.addWidget(self.label_6, 3, 0, 1, 1)
-
-        self.targetDir = QLineEdit(self.layoutWidget)
-        self.targetDir.setObjectName(u"targetDir")
-
-        self.gridLayout.addWidget(self.targetDir, 3, 1, 1, 1)
-
-        self.targetFileBrowse = QPushButton(self.layoutWidget)
-        self.targetFileBrowse.setObjectName(u"targetFileBrowse")
-
-        self.gridLayout.addWidget(self.targetFileBrowse, 3, 2, 1, 1)
+        self.gridLayout.addWidget(self.sourceDir, 3, 1, 1, 1)
 
         self.sigmaSlider = QSlider(self.layoutWidget)
         self.sigmaSlider.setObjectName(u"sigmaSlider")
@@ -95,6 +85,11 @@ class Ui_MainWindow(object):
         self.sigmaSlider.setTickInterval(1)
 
         self.gridLayout.addWidget(self.sigmaSlider, 0, 1, 1, 1)
+
+        self.label_6 = QLabel(self.layoutWidget)
+        self.label_6.setObjectName(u"label_6")
+
+        self.gridLayout.addWidget(self.label_6, 4, 0, 1, 1)
 
         self.label_3 = QLabel(self.layoutWidget)
         self.label_3.setObjectName(u"label_3")
@@ -111,7 +106,32 @@ class Ui_MainWindow(object):
         self.label_5 = QLabel(self.layoutWidget)
         self.label_5.setObjectName(u"label_5")
 
-        self.gridLayout.addWidget(self.label_5, 2, 0, 1, 1)
+        self.gridLayout.addWidget(self.label_5, 3, 0, 1, 1)
+
+        self.sourceFileBrowse = QPushButton(self.layoutWidget)
+        self.sourceFileBrowse.setObjectName(u"sourceFileBrowse")
+
+        self.gridLayout.addWidget(self.sourceFileBrowse, 3, 2, 1, 1)
+
+        self.label_2 = QLabel(self.layoutWidget)
+        self.label_2.setObjectName(u"label_2")
+
+        self.gridLayout.addWidget(self.label_2, 0, 0, 1, 1)
+
+        self.label_7 = QLabel(self.layoutWidget)
+        self.label_7.setObjectName(u"label_7")
+
+        self.gridLayout.addWidget(self.label_7, 2, 0, 1, 1)
+
+        self.targetFileBrowse = QPushButton(self.layoutWidget)
+        self.targetFileBrowse.setObjectName(u"targetFileBrowse")
+
+        self.gridLayout.addWidget(self.targetFileBrowse, 4, 2, 1, 1)
+
+        self.targetDir = QLineEdit(self.layoutWidget)
+        self.targetDir.setObjectName(u"targetDir")
+
+        self.gridLayout.addWidget(self.targetDir, 4, 1, 1, 1)
 
         self.sigmaDisplay = QLineEdit(self.layoutWidget)
         self.sigmaDisplay.setObjectName(u"sigmaDisplay")
@@ -131,23 +151,13 @@ class Ui_MainWindow(object):
 
         self.gridLayout.addWidget(self.amountSlider, 1, 1, 1, 1)
 
-        self.label_2 = QLabel(self.layoutWidget)
-        self.label_2.setObjectName(u"label_2")
+        self.colorMap = QComboBox(self.layoutWidget)
+        self.colorMap.setObjectName(u"colorMap")
 
-        self.gridLayout.addWidget(self.label_2, 0, 0, 1, 1)
-
-        self.sourceFileBrowse = QPushButton(self.layoutWidget)
-        self.sourceFileBrowse.setObjectName(u"sourceFileBrowse")
-
-        self.gridLayout.addWidget(self.sourceFileBrowse, 2, 2, 1, 1)
-
-        self.sourceDir = QLineEdit(self.layoutWidget)
-        self.sourceDir.setObjectName(u"sourceDir")
-
-        self.gridLayout.addWidget(self.sourceDir, 2, 1, 1, 1)
+        self.gridLayout.addWidget(self.colorMap, 2, 1, 1, 1)
 
         self.gridLayout.setColumnStretch(0, 1)
-        self.gridLayout.setColumnStretch(1, 4)
+        self.gridLayout.setColumnStretch(1, 5)
         self.gridLayout.setColumnStretch(2, 1)
 
         self.verticalLayout.addLayout(self.gridLayout)
@@ -156,17 +166,21 @@ class Ui_MainWindow(object):
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.originalImage = QLabel(self.layoutWidget)
         self.originalImage.setObjectName(u"originalImage")
-        self.originalImage.setFrameShape(QFrame.Shape.Box)
-        self.originalImage.setMidLineWidth(1)
+        self.originalImage.setFrameShape(QFrame.Shape.NoFrame)
+        self.originalImage.setFrameShadow(QFrame.Shadow.Sunken)
+        self.originalImage.setLineWidth(2)
+        self.originalImage.setMidLineWidth(2)
 
-        self.gridLayout_2.addWidget(self.originalImage, 1, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.originalImage, 1, 0, 1, 1, Qt.AlignmentFlag.AlignTop)
 
         self.newImage = QLabel(self.layoutWidget)
         self.newImage.setObjectName(u"newImage")
-        self.newImage.setFrameShape(QFrame.Shape.Box)
-        self.newImage.setMidLineWidth(1)
+        self.newImage.setFrameShape(QFrame.Shape.NoFrame)
+        self.newImage.setFrameShadow(QFrame.Shadow.Sunken)
+        self.newImage.setLineWidth(2)
+        self.newImage.setMidLineWidth(2)
 
-        self.gridLayout_2.addWidget(self.newImage, 1, 1, 1, 1)
+        self.gridLayout_2.addWidget(self.newImage, 1, 1, 1, 1, Qt.AlignmentFlag.AlignTop)
 
         self.label_9 = QLabel(self.layoutWidget)
         self.label_9.setObjectName(u"label_9")
@@ -227,6 +241,12 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout.addWidget(self.proceedButton)
 
+        self.cancelButton = QPushButton(self.layoutWidget)
+        self.cancelButton.setObjectName(u"cancelButton")
+        self.cancelButton.setStyleSheet(u"background: rgb(246, 245, 244)")
+
+        self.horizontalLayout.addWidget(self.cancelButton)
+
 
         self.verticalLayout.addLayout(self.horizontalLayout)
 
@@ -255,14 +275,15 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
         self.actionExit.setText(QCoreApplication.translate("MainWindow", u"Exit", None))
-        self.label.setText(QCoreApplication.translate("MainWindow", u"The Sharper Image", None))
+        self.label.setText(QCoreApplication.translate("MainWindow", u"Sharper Image", None))
         self.label_4.setText(QCoreApplication.translate("MainWindow", u"(A tool for sharpening images)", None))
         self.label_6.setText(QCoreApplication.translate("MainWindow", u"Target directory:", None))
-        self.targetFileBrowse.setText(QCoreApplication.translate("MainWindow", u"Browse...", None))
         self.label_3.setText(QCoreApplication.translate("MainWindow", u"Amount:", None))
         self.label_5.setText(QCoreApplication.translate("MainWindow", u"Source directory:", None))
-        self.label_2.setText(QCoreApplication.translate("MainWindow", u"Sigma:", None))
         self.sourceFileBrowse.setText(QCoreApplication.translate("MainWindow", u"Browse...", None))
+        self.label_2.setText(QCoreApplication.translate("MainWindow", u"Sigma:", None))
+        self.label_7.setText(QCoreApplication.translate("MainWindow", u"Color filter:", None))
+        self.targetFileBrowse.setText(QCoreApplication.translate("MainWindow", u"Browse...", None))
         self.originalImage.setText(QCoreApplication.translate("MainWindow", u"TextLabel", None))
         self.newImage.setText(QCoreApplication.translate("MainWindow", u"TextLabel", None))
         self.label_9.setText(QCoreApplication.translate("MainWindow", u"Before:", None))
@@ -270,6 +291,7 @@ class Ui_MainWindow(object):
         self.label_11.setText(QCoreApplication.translate("MainWindow", u"Progress:", None))
         self.status.setText(QCoreApplication.translate("MainWindow", u"Not started", None))
         self.proceedButton.setText(QCoreApplication.translate("MainWindow", u"Process Files Now!", None))
+        self.cancelButton.setText(QCoreApplication.translate("MainWindow", u"Cancel", None))
         self.menuMenu.setTitle(QCoreApplication.translate("MainWindow", u"Main Menu", None))
     # retranslateUi
 

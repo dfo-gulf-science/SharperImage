@@ -164,7 +164,6 @@ class MainWindow(QMainWindow):
         self.disable_controls(False)
 
     def update_file_status(self, current: int, total: int):
-        print("hello")
         txt = f"{current} of {total} files processed..."
         self.ui.status.setText(txt)
 

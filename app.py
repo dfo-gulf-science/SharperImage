@@ -3,7 +3,7 @@ import sys
 import time
 
 from PySide6.QtCore import Qt, QSize, QSettings, QCoreApplication
-from PySide6.QtGui import QPixmap, QTransform, QResizeEvent
+from PySide6.QtGui import QPixmap, QTransform, QResizeEvent, QWheelEvent
 from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QDialog, QFileDialog, QMessageBox
 # Import the generated layout class from your compiled file
 from ui_main_window import Ui_MainWindow
@@ -80,8 +80,8 @@ class MainWindow(QMainWindow):
             aspectMode=Qt.AspectRatioMode.KeepAspectRatio,
             mode=Qt.TransformationMode.SmoothTransformation  # Keeps the image crisp
         )
-        self.ui.originalImage.setPixmap(original_pixmap)
-
+        # self.ui.originalImage.setPixmap(original_pixmap)
+        self.ui.originalImage.setImage(original_pixmap)
         # now we need the transformation with the defaulted values
         self.update_image()
 
@@ -157,7 +157,8 @@ class MainWindow(QMainWindow):
         if not self.is_cancelled:
             QMessageBox.information(self, "Job Successful", f"All {idx} images have been processed!")
         else:
-            QMessageBox.warning(self, "Job Cancelled", f"A total of {idx} images were processed before the job was cancelled.")
+            QMessageBox.warning(self, "Job Cancelled",
+                                f"A total of {idx} images were processed before the job was cancelled.")
         self.ui.progressBar.setValue(0)
         self.ui.status.setText("Ready.")
         self.disable_controls(False)
@@ -238,8 +239,8 @@ class MainWindow(QMainWindow):
             Qt.AspectRatioMode.KeepAspectRatio,
             Qt.TransformationMode.SmoothTransformation
         )
+        self.ui.newImage.setImage(new_pixmap)
 
-        self.ui.newImage.setPixmap(new_pixmap)
 
 
 if __name__ == "__main__":

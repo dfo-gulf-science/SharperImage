@@ -22,6 +22,8 @@ from PySide6.QtWidgets import (QApplication, QComboBox, QFrame, QGridLayout,
     QSizePolicy, QSlider, QSpacerItem, QStatusBar,
     QVBoxLayout, QWidget)
 
+from zoomable_label import ZoomableLabel
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
@@ -164,7 +166,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_2 = QGridLayout()
         self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.originalImage = QLabel(self.layoutWidget)
+        self.originalImage = ZoomableLabel(self.layoutWidget)
         self.originalImage.setObjectName(u"originalImage")
         self.originalImage.setFrameShape(QFrame.Shape.NoFrame)
         self.originalImage.setFrameShadow(QFrame.Shadow.Sunken)
@@ -173,7 +175,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_2.addWidget(self.originalImage, 1, 0, 1, 1, Qt.AlignmentFlag.AlignTop)
 
-        self.newImage = QLabel(self.layoutWidget)
+        self.newImage = ZoomableLabel(self.layoutWidget)
         self.newImage.setObjectName(u"newImage")
         self.newImage.setFrameShape(QFrame.Shape.NoFrame)
         self.newImage.setFrameShadow(QFrame.Shadow.Sunken)

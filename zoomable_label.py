@@ -1,6 +1,6 @@
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QSize
 from PySide6.QtGui import QPixmap, QWheelEvent
-from PySide6.QtWidgets import QLabel
+from PySide6.QtWidgets import QLabel, QStyle
 
 
 class ZoomableLabel(QLabel):
@@ -9,11 +9,13 @@ class ZoomableLabel(QLabel):
         self.original_pixmap = QPixmap()
         self.zoom_factor = 1.0
         self.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.setScaledContents(False)
+        self.setStyleSheet("background: black")
 
     # Add a helper function to set the image later in your code
     def setImage(self, pixmap):
         self.original_pixmap = pixmap
-        self.zoom_factor = 1.0
+        self.zoom_factor = 1.5
         self.update_image()
 
     def wheelEvent(self, event: QWheelEvent):
@@ -49,3 +51,12 @@ class ZoomableLabel(QLabel):
             )
             self.setPixmap(scaled_pixmap)
 
+
+    def sizeHint(self):
+        # Tells the grid layout: "Act like I am always this size"
+        # Adjust 200, 200 to your desired default/ideal cell size in Designer
+        return QSize(500, 500)
+
+    def minimumSizeHint(self):
+        # Prevents the layout from expanding when the image gets massive
+        return QSize(400, 400)

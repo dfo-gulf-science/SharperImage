@@ -17,10 +17,10 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
 from PySide6.QtWidgets import (QApplication, QComboBox, QFrame, QGridLayout,
-    QHBoxLayout, QLabel, QLineEdit, QMainWindow,
-    QMenu, QMenuBar, QProgressBar, QPushButton,
-    QSizePolicy, QSlider, QSpacerItem, QStatusBar,
-    QVBoxLayout, QWidget)
+    QHBoxLayout, QLabel, QLayout, QLineEdit,
+    QMainWindow, QMenu, QMenuBar, QProgressBar,
+    QPushButton, QSizePolicy, QSlider, QSpacerItem,
+    QStatusBar, QVBoxLayout, QWidget)
 
 from zoomable_label import ZoomableLabel
 
@@ -166,6 +166,7 @@ class Ui_MainWindow(object):
 
         self.gridLayout_2 = QGridLayout()
         self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.gridLayout_2.setSizeConstraint(QLayout.SizeConstraint.SetFixedSize)
         self.originalImage = ZoomableLabel(self.layoutWidget)
         self.originalImage.setObjectName(u"originalImage")
         self.originalImage.setFrameShape(QFrame.Shape.NoFrame)
@@ -200,6 +201,10 @@ class Ui_MainWindow(object):
         self.gridLayout_2.setRowStretch(1, 8)
 
         self.verticalLayout.addLayout(self.gridLayout_2)
+
+        self.verticalSpacer = QSpacerItem(20, 10, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+
+        self.verticalLayout.addItem(self.verticalSpacer)
 
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")

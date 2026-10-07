@@ -163,8 +163,7 @@ The code repository is located at:  <a href='https://github.com/dfo-gulf-science
             return
 
         # let's create a memory
-
-        total_files = os.listdir(source_dir).__len__()
+        total_files = [f for f in os.listdir(source_dir) if os.path.isfile(os.path.join(source_dir, f))].__len__()
         idx = 0
         self.ui.progressBar.setMinimum(0)
         self.ui.progressBar.setMaximum(total_files)
@@ -182,20 +181,21 @@ The code repository is located at:  <a href='https://github.com/dfo-gulf-science
 
         for f in os.listdir(source_dir):
             og_path = os.path.join(source_dir, f)
-            # we want to make sure we are not going to inadvertently overwrite the original file
-            new_f = f.split(".")[0] + "-enhanced." + f.split(".")[-1]
-            new_path = os.path.join(target_dir, new_f)
-            img = cv2.imread(og_path)
-            new_data = sharpen(img, sigma, amount)
-            if color_map is not None:
-                new_data = cv2.applyColorMap(new_data, color_map)
-            cv2.imwrite(new_path, img=new_data)
-            idx += 1
-            self.update_file_status(idx, total_files)
-            self.ui.progressBar.setValue(idx)
-            QCoreApplication.processEvents()
-            if self.is_cancelled:
-                break
+            if os.path.isfile(og_path):
+                # we want to make sure we are not going to inadvertently overwrite the original file
+                new_f = f.split(".")[0] + "-enhanced." + f.split(".")[-1]
+                new_path = os.path.join(target_dir, new_f)
+                img = cv2.imread(og_path)
+                new_data = sharpen(img, sigma, amount)
+                if color_map is not None:
+                    new_data = cv2.applyColorMap(new_data, color_map)
+                cv2.imwrite(new_path, img=new_data)
+                idx += 1
+                self.update_file_status(idx, total_files)
+                self.ui.progressBar.setValue(idx)
+                QCoreApplication.processEvents()
+                if self.is_cancelled:
+                    break
 
         if not self.is_cancelled:
             QMessageBox.information(self, "Job Successful", f"All {idx} images have been processed!")

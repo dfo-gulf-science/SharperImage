@@ -192,8 +192,6 @@ The code repository is located at:  <a href='https://github.com/dfo-gulf-science
                         new_data = cv2.applyColorMap(new_data, color_map)
                     cv2.imwrite(new_path, img=new_data)
 
-                    raise BaseException("bad news")
-
             except BaseException as exc:
                 QMessageBox.information(self, "Error",
                                         f"The app encountered an error when processing the file {f}. "

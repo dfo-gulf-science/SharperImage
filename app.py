@@ -33,7 +33,7 @@ class MainWindow(QMainWindow):
 
         # initialize the options for the color map combobox
         options = [
-            ("None", None),
+            ("Greyscale", None),
             ("AUTUMN".title(), cv2.COLORMAP_AUTUMN),
             ("BONE".title(), cv2.COLORMAP_BONE),
             ("JET".title(), cv2.COLORMAP_JET),
@@ -180,16 +180,30 @@ The code repository is located at:  <a href='https://github.com/dfo-gulf-science
         self.settings.setValue("last_amount", amount)
 
         for f in os.listdir(source_dir):
-            og_path = os.path.join(source_dir, f)
-            if os.path.isfile(og_path):
-                # we want to make sure we are not going to inadvertently overwrite the original file
-                new_f = f.split(".")[0] + "-enhanced." + f.split(".")[-1]
-                new_path = os.path.join(target_dir, new_f)
-                img = cv2.imread(og_path)
-                new_data = sharpen(img, sigma, amount)
-                if color_map is not None:
-                    new_data = cv2.applyColorMap(new_data, color_map)
-                cv2.imwrite(new_path, img=new_data)
+            try:
+                og_path = os.path.join(source_dir, f)
+                if os.path.isfile(og_path):
+                    # we want to make sure we are not going to inadvertently overwrite the original file
+                    new_f = f.split(".")[0] + "-enhanced." + f.split(".")[-1]
+                    new_path = os.path.join(target_dir, new_f)
+                    img = cv2.imread(og_path, cv2.IMREAD_GRAYSCALE)
+                    new_data = sharpen(img, sigma, amount)
+                    if color_map is not None:
+                        new_data = cv2.applyColorMap(new_data, color_map)
+                    cv2.imwrite(new_path, img=new_data)
+
+                    raise BaseException("bad news")
+
+            except BaseException as exc:
+                QMessageBox.information(self, "Error",
+                                        f"The app encountered an error when processing the file {f}. "
+                                        f"The file will be skipped."
+                                        f"\n\nHere is the error:"
+                                        f"\n\n{exc}"
+                                        )
+                continue
+
+            finally:
                 idx += 1
                 self.update_file_status(idx, total_files)
                 self.ui.progressBar.setValue(idx)
